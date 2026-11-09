@@ -23,5 +23,9 @@ P=ios/Runner/Info.plist
 grep -q NSMicrophoneUsageDescription "$P" || perl -0pi -e 's#</dict>\s*</plist>\s*$#\t<key>NSMicrophoneUsageDescription</key>\n\t<string>Daftar records audio alongside your notes.</string>\n</dict>\n</plist>\n#' "$P"
 perl -0pi -e 's#(<key>CFBundleDisplayName</key>\s*<string>)[^<]*(</string>)#$1&\#x62F;&\#x641;&\#x62A;&\#x631;$2#' "$P"
 
+# iOS 14 minimum (required by file_picker)
+perl -pi -e 's/IPHONEOS_DEPLOYMENT_TARGET = 1[0-3]\.0;/IPHONEOS_DEPLOYMENT_TARGET = 14.0;/g' ios/Runner.xcodeproj/project.pbxproj
+[ -f ios/Podfile ] && perl -pi -e "s/^#?\s*platform :ios, '[0-9.]+'/platform :ios, '14.0'/" ios/Podfile
+
 flutter pub get
 echo "Done. Run: flutter run"

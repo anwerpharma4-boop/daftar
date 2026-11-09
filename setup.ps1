@@ -47,6 +47,12 @@ if ($pl -notmatch 'NSMicrophoneUsageDescription') {
 $pl = $pl -replace '(<key>CFBundleDisplayName</key>\s*<string>)[^<]*(</string>)', '$1&#x62F;&#x641;&#x62A;&#x631;$2'
 [IO.File]::WriteAllText((Resolve-Path $plist).Path, $pl, $utf8)
 
+# iOS 14 minimum (required by file_picker)
+$pbx = 'ios/Runner.xcodeproj/project.pbxproj'
+$t = [IO.File]::ReadAllText((Resolve-Path $pbx).Path)
+$t = $t -replace 'IPHONEOS_DEPLOYMENT_TARGET = 1[0-3]\.0;', 'IPHONEOS_DEPLOYMENT_TARGET = 14.0;'
+[IO.File]::WriteAllText((Resolve-Path $pbx).Path, $t, $utf8)
+
 flutter pub get
 Write-Host ''
 Write-Host 'Done. Connect an Android device (or start an emulator) and run:  flutter run' -ForegroundColor Green

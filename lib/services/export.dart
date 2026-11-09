@@ -88,9 +88,9 @@ Rect shareOriginOf(BuildContext context) {
 }
 
 Future<void> shareFile(File f, String subject, Rect origin) async {
-  await Share.shareXFiles(
-    [XFile(f.path, mimeType: 'application/pdf')],
+  await SharePlus.instance.share(ShareParams(
+    files: [XFile(f.path, mimeType: 'application/pdf')],
     subject: subject,
     sharePositionOrigin: origin,
-  );
+  ));
 }

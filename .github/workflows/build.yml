@@ -65,3 +65,24 @@ jobs:
         with:
           name: daftar-ios
           path: daftar-ios-unsigned.ipa
+
+  # Publishes both files as a GitHub Release, so they always have a direct link:
+  #   https://github.com/<user>/daftar/releases/latest/download/daftar-ios-unsigned.ipa
+  #   https://github.com/<user>/daftar/releases/latest/download/daftar-android.apk
+  release:
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Daftar build ${{ github.run_number }}
+          make_latest: true
+          files: |
+            daftar-ios-unsigned.ipa
+            daftar-android.apk

@@ -12,16 +12,13 @@ typedef PickedPdf = ({String name, Uint8List bytes});
 
 /// Lets the user choose a PDF file. Returns null if cancelled.
 Future<PickedPdf?> pickPdf() async {
-  final res = await FilePicker.platform.pickFiles(
+  final f = await FilePicker.pickFile(
     type: FileType.custom,
     allowedExtensions: ['pdf'],
-    withData: true,
   );
-  if (res == null || res.files.isEmpty) return null;
-  final f = res.files.single;
-  final bytes =
-      f.bytes ?? (f.path != null ? await File(f.path!).readAsBytes() : null);
-  if (bytes == null) return null;
+  if (f == null) return null;
+  final bytes = await f.readAsBytes();
+  if (bytes.isEmpty) return null;
   return (name: p.basenameWithoutExtension(f.name), bytes: bytes);
 }
 
