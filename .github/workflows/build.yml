@@ -27,7 +27,7 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
       - run: flutter test
-      - run: flutter build apk --release
+      - run: bash .github/scripts/run_logged.sh flutter build apk --release
       - run: cp build/app/outputs/flutter-apk/app-release.apk daftar-android.apk
       - uses: actions/upload-artifact@v4
         with:
@@ -45,7 +45,7 @@ jobs:
       - name: Generate platform folders if missing
         run: '[ -d ios ] || bash setup.sh'
       - run: flutter pub get
-      - run: flutter build ios --release --no-codesign
+      - run: bash .github/scripts/run_logged.sh flutter build ios --release --no-codesign
       - name: Package unsigned IPA
         run: |
           mkdir -p Payload
